@@ -1,5 +1,7 @@
 package org.geektimes.projects.user.service;
 
+import javax.persistence.EntityTransaction;
+import javax.persistence.RollbackException;
 import org.geektimes.projects.user.domain.User;
 import org.geektimes.projects.user.sql.LocalTransactional;
 
@@ -20,14 +22,22 @@ public class UserServiceImpl implements UserService {
     @LocalTransactional
     public boolean register(User user) {
         // before process
-//        EntityTransaction transaction = entityManager.getTransaction();
-//        transaction.begin();
+        EntityTransaction transaction = entityManager.getTransaction();
+        transaction.begin();
 
         // 主调用
         entityManager.persist(user);
 
+        try {
+            entityManager.persist(user);
+            transaction.commit();
+            return true;
+        } catch (IllegalStateException | RollbackException e) {
+            return false;
+        }
+
         // 调用其他方法方法
-        update(user); // 涉及事务
+//        update(user); // 涉及事务
         // register 方法和 update 方法存在于同一线程
         // register 方法属于 Outer 事务（逻辑）
         // update 方法属于 Inner 事务（逻辑）
@@ -53,7 +63,7 @@ public class UserServiceImpl implements UserService {
         // after process
         // transaction.commit();
 
-        return false;
+//        return false;
     }
 
     @Override

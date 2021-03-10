@@ -34,7 +34,7 @@ public class DatabaseUserRepository implements UserRepository {
 
     private final DBConnectionManager dbConnectionManager;
 
-    public DatabaseUserRepository() {
+    public DatabaseUserRepository( DBConnectionManager connectionManager) {
         this.dbConnectionManager = ComponentContext.getInstance().getComponent("bean/DBConnectionManager");
     }
 
