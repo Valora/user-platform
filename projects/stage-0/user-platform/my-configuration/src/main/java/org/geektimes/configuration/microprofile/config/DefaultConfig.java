@@ -1,6 +1,7 @@
 package org.geektimes.configuration.microprofile.config;
 
 
+import java.util.Iterator;
 import org.eclipse.microprofile.config.Config;
 import org.eclipse.microprofile.config.ConfigValue;
 import org.eclipse.microprofile.config.spi.ConfigSource;
@@ -15,7 +16,7 @@ import java.util.Set;
 
 import static java.util.stream.StreamSupport.stream;
 
-class DefaultConfig implements Config {
+public class DefaultConfig implements Config {
 
     private final ConfigSources configSources;
 
@@ -36,7 +37,27 @@ class DefaultConfig implements Config {
 
     @Override
     public ConfigValue getConfigValue(String propertyName) {
-        return null;
+        String propertyValue = null;
+
+        ConfigSource configSource = null;
+
+        Iterator<ConfigSource> iterator = configSources.iterator();
+
+        while (iterator.hasNext()) {
+            configSource = iterator.next();
+            propertyValue = configSource.getValue(propertyName);
+            if (propertyValue != null) {
+                break;
+            }
+        }
+
+        if (propertyValue == null) {
+            return null;
+        }
+
+        return new DefaultConfigValue(propertyName, propertyValue, propertyValue,
+            configSource.getName(),
+            configSource.getOrdinal());
     }
 
     protected String getPropertyValue(String propertyName) {
