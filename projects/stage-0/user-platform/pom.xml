@@ -334,6 +334,52 @@
                     <version>${maven.war.version}</version>
                 </plugin>
 
+                <plugin>
+                    <groupId>org.apache.tomcat.maven</groupId>
+                    <artifactId>tomcat7-maven-plugin</artifactId>
+                    <version>2.1</version>
+                    <dependencies>
+                        <dependency>
+                            <groupId>org.apache.derby</groupId>
+                            <artifactId>derby</artifactId>
+                            <version>${derby.version}</version>
+                        </dependency>
+                    </dependencies>
+                    <executions>
+                        <execution>
+                            <id>tomcat-run</id>
+                            <goals>
+                                <!-- 最终打包成可执行的jar包 -->
+                                <goal>exec-war-only</goal>
+                            </goals>
+                            <phase>package</phase>
+                            <configuration>
+                                <!-- ServletContext 路径 -->
+                                <path>/</path>
+                                <enableNaming>true</enableNaming>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+                <!--                <plugin>-->
+                <!--                    <groupId>org.apache.tomcat.maven</groupId>-->
+                <!--                    <artifactId>tomcat8-maven-plugin</artifactId>-->
+                <!--                    <version>3.0-r1756463</version>-->
+                <!--                    <executions>-->
+                <!--                        <execution>-->
+                <!--                            <id>tomcat-run</id>-->
+                <!--                            <goals>-->
+                <!--                                &lt;!&ndash; 最终打包成可执行的jar包 &ndash;&gt;-->
+                <!--                                <goal>exec-war-only</goal>-->
+                <!--                            </goals>-->
+                <!--                            <phase>package</phase>-->
+                <!--                            <configuration>-->
+                <!--                                &lt;!&ndash; ServletContext 路径 &ndash;&gt;-->
+                <!--                                <path>/</path>-->
+                <!--                            </configuration>-->
+                <!--                        </execution>-->
+                <!--                    </executions>-->
+                <!--                </plugin>-->
             </plugins>
         </pluginManagement>
 
